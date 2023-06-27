@@ -17,9 +17,7 @@ class AuthController extends AbstractController
         // return $this->api_key;
         $session = $request->getSession();
         $info = ['status' => true];
-        if (!$session->get('currentuser')) {
-            $info = ['status' => false, 'url' => 'https://my.net2all.online'];
-        }
+        if (!$session->get('currentuser')) {$info = ['status' => false, 'url' => 'https://my.net2all.online'];}
 
         return $info;
     }

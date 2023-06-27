@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 class CompteBPayController extends AbstractController
 {
@@ -26,9 +27,12 @@ class CompteBPayController extends AbstractController
         ]);
     }
 
-    #[Route('/create/compte/Bpay/{user_id}/{type_id}', name: 'app_new_compte_b_pay')]
-    public function new(int $user_id, int $type_id)
+    #[Route('/create/compte/Bpay', name: 'app_new_compte_b_pay')]
+    public function new(Request $request)
     {
+        $user_id = $request->get('user_id');
+        $type_id = $request->get('type_id');
+
         $accountNumber = $this->getRandomText(10);
         $ecash = new CompteBPay();
         $ecash->setNumeroCompte($accountNumber);
