@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Règlement B-PAY{% endblock %}
+
+{% block body %}
+    <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Règlement B-Pay'} %}
+
+                <section class="panel">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-offset-3" >
+                            <div class="tabs" style="position: relative;">
+                                <div class="tab-content"  style="position: relative;">
+                                    <div id="qrCode" class="tab-pane  active">
+                                        <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                                            <div class="qrCode_container" style="display: flex;flex-direction: row;justify-content: center;align-items: center;position: relative;">
+                                                <div style="position: absolute;display:flex;flex-direction: column;justify-content: center;align-items: center;   right: 2px;top: 2px;width: 30px;height: 30px;background-color: rgba(0,0,0,0.5);border-radius: 10px;">
+ <span class="icon icon-lg"><i class="fa fa-camera" style="color:white;"></i></span>
+                                                </div>
+                                                <div style="width: 250px;height: 250px;">
+                                                    <img style="width: 100%; height: 100%;object-fit: cover;" src="{{ qr_code_path(linkData.code) }}">
+                                                </div>
+                                            </div>
+                                            <br/>
+                                         </div>
+                                            <button onclick="copierLink()" data-link="{{linkData.linkPaymentUrl }}" id="account-to-account-transfer-confirm" type="submit"  style="
+  border: 0 !important;border-radius: 0 !important; color:white !important;"  class="btn btn-dark btn-block btn-lg mt-lg">
+                                    <span class="icon icon-lg"><i class="fa fa-link"></i></span>&nbsp;Copier lien
+                                </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+    </section></div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/assets/js/recharge.js') }}"></script>
+    <script type="text/javascript">
+        function copierLink() {
+          // Get the text field
+          let link = document.getElementById('account-to-account-transfer-confirm');
+          // Select the text field
+           // Copy the text inside the text field
+          navigator.clipboard.writeText(link.getAttribute('data-link'));
+          // Alert the copied text
+          link.textContent = 'Lien copié'
+        }
+    </script>
+{% endblock %}

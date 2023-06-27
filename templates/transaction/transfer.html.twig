@@ -1,0 +1,79 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Transferts B-PAY{% endblock %}
+{% block sideBar %}
+    {{ render(path('member_menu_left')) }}
+{% endblock %}
+{% block body %}
+<section class="content-wrapper">
+    {% include 'shared/adminLTE/_breadcrumb.html.twig' with {'title':'Transfert B-PAY'} %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                {% for type in transfertList %}
+                    <div class="col-md-3 col-sm-6 col-12 widget-type-js" data-type="{{ type.code }}"  style="cursor: pointer;">
+                        <div class="info-box">
+                            <span class="info-box-icon {{ type.color }}"><i class=" {{ type.sign }}"></i></span>
+                            <div class="info-box-content">
+                                <span class="info-box-text">{{ type.name }}</span>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <br/>
+            <br/>
+            <div class="row justify-content-center">
+                <div class="col-md-4  col-md-offset-4">
+                    <div data-type="{{ type }}" data-url="{{ path('transaction_bpay_form_type') }}" id="panel-transaction-form">
+                    </div>
+                    <div id="another-step-container"></div>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+    </section>
+</section>
+  {#  <section class="body" style="background-color: white !important;">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+            {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Transfert B-PAY'} %}
+
+            <div style="display: flex;flex-direction: row;justify-content:center;align-items: center;">
+                {% for type in transfertList %}
+                        <div data-type="{{ type.code }}" class="widget-summary widget-type-js">
+                            <div class="widget-summary-col-icon" style="text-align: center;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                                <div class="summary-icon" style="background-color: {{ type.color }};">
+                                    <i class="{{ type.sign }}"></i>
+                                </div>
+                                <h6 style="color:black;font-size: 16px;white-space: nowrap;">{{ type.name }}</h6>
+                            </div>
+                        </div>
+                {% endfor %}
+            </div>
+            <br/>
+            <br/>
+            <div class="row">
+                <div class="col-md-6 col-lg-offset-3">
+                    <div data-type="{{ type }}" data-url="{{ path('transaction_bpay_form_type') }}" id="panel-transaction-form">
+                    </div>
+                    <div id="another-step-container"></div>
+                </div>
+            </div>
+            </section>
+        </div>
+    </section>#}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('qr-code') }}
+    <script type="text/javascript" src="{{ asset('/assets/js/transfert.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('/assets/js/recharge.js') }}"></script>
+{% endblock %}

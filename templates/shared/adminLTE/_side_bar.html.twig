@@ -1,0 +1,124 @@
+
+<aside class="main-sidebar sidebar-dark-primary elevation-3">
+    <!-- Brand Logo -->
+    <a href="index3.html" class="brand-link">
+        <img src="{{ asset('/assets/images/bpay.png') }}" alt="B-PAY Logo" class="brand-image" style="opacity: .8">
+        <span class="brand-text font-weight-light">B-PAY</span>
+    </a>
+
+<!-- Sidebar -->
+<div class="sidebar">
+    <!-- Sidebar user panel (optional) -->
+    <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+        <div class="image">
+            {% if connetedUser.imageUrl %}
+                <img src="{{ asset('/assets/images/' ~ connetedUser.imageUrl ) }}" class="img-circle elevation-2" alt="Photo de profil">
+            {% else %}
+                <img src="{{ asset('/assets/images/default-user.png') }}" class="img-circle elevation-2" alt="Photo de profil">
+            {% endif %}
+        </div>
+        <div class="info" style="color: white;">
+            {% if connetedUser.type is same as ('ENTERPRISE') %}
+                <span class="d-block">{{ user.nomEntreprise }}&nbsp;({{' Entreprise '}})</span>
+            {% elseif connetedUser.type is same as ('PARTICULAR') %}
+                <span class="d-block">{{ user.nom ~ ' ' ~ user.prenom }}&nbsp;({{' Particulier '}})</span>
+            {% endif %}
+        </div>
+    </div>
+    <!-- Sidebar Menu -->
+    <nav class="mt-2">
+        <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+            <!-- Add icons to the links using the .nav-icon class
+                 with font-awesome or any other icon font library -->
+            {% set active = app.request.get('_route') is same as ('member_dashboard') ? 'menu-open':'' %}
+            <li class="nav-item {{ active }}">
+                <a href="{{ path('member_dashboard') }}" class="nav-link">
+                    <i class="nav-icon fas fa-tachometer-alt"></i>
+                    <p style="white-space: nowrap;">
+                        Tableau de bord
+                    </p>
+                </a>
+            </li>
+            {% set active = app.request.get('_route') is same as ('business_recharge') ? 'active':'' %}
+            <li class="nav-item {{ active }}">
+                <a href="{{ path('business_recharge') }}" class="nav-link">
+                    <i class="nav-icon fas fa-exchange"></i>
+                    <p style="white-space: nowrap;">
+                        Rechargement B-PAY
+                    </p>
+                </a>
+            </li>
+            {% set active = app.request.get('_route') is same as ('transaction_transfert_bpay') ? 'active':'' %}
+            <li class="nav-item {{ active }}">
+                <a href="{{ path('transaction_transfert_bpay') }}" class="nav-link">
+                    <i class="nav-icon fas fa-exchange"></i>
+                    <p style="white-space: nowrap;">
+                        Transfert B-PAY
+                    </p>
+                </a>
+            </li>
+            <li class="nav-item active">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-coins"></i>
+                    <p style="white-space: nowrap;">
+                        Règlement B-PAY
+                    </p>
+                </a>
+               {# <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="./index.html" class="nav-link">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Générer lien paiement</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="./index2.html" class="nav-link active">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Mes règlements</p>
+                        </a>
+                    </li>
+                </ul>#}
+            </li>
+            {% set active = app.request.get('_route') is same as ('member_sous_comptes') ? 'active':'' %}
+            <li class="nav-item {{ active }}">
+                <a href="{{ path('member_sous_comptes') }}" class="nav-link">
+                    <i class="nav-icon fas fa-credit-card-alt"></i>
+                    <p style="white-space: nowrap;">
+                        Mes sous-comptes
+                    </p>
+                </a>
+            </li>
+            {% set active = app.request.get('_route') is same as ('member_sous_comptes') ? 'active':'' %}
+
+            <li class="nav-item">
+                <a href="#" class="nav-link">
+                    <i class="nav-icon fas fa-th"></i>
+                    <p style="white-space: nowrap;">
+                        Historique des paiements
+                    </p>
+                </a>
+            </li>
+            {% set active = app.request.get('_route') is same as ('member_transaction_list') ? 'active':'' %}
+
+            <li class="nav-item  {{ active }}">
+                <a href="{{ path('member_transaction_list') }}" class="nav-link">
+                    <i class="nav-icon fas fa-money-bill"></i>
+                    <p style="white-space: nowrap;">
+                        Historique de transactions
+                    </p>
+                </a>
+            </li>
+           <li class="nav-item">
+                <a href="/account/logout" class="nav-link">
+                    <i class="nav-icon fas fa-sign-out"></i>
+                    <p style="white-space: nowrap;">
+                        Déconnexion
+                    </p>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <!-- /.sidebar-menu -->
+</div>
+<!-- /.sidebar -->
+</aside>

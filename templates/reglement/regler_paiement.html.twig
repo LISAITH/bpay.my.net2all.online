@@ -1,0 +1,204 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Règlement B-PAY{% endblock %}
+
+{% block body %}
+    <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Règlement B-PAY'} %}
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3 col-xl-6">
+                        <section class="panel" id="panel-transaction-form">
+                            <header class="panel-heading" style="background-color: #f0f0f0;border-bottom: 0 !important;">
+                                <div class="panel-heading-profile-picture">
+                                    <img  src="{{ asset('/assets/images/'~ senderProfilImg) }}" />
+                                </div>
+                                <h4 style="color:black;" class="text-semibold  text-center mt-sm">{{ sender.nom ~ ' ' ~ sender.prenoms }}</h4>
+                            </header>
+                            <div class="panel-body">
+                                <h4 class="text-semibold mt-sm"></h4>
+                                <div class="alert" style="font-weight: bold;background-color: #f0f0f0;color:#3c3c3c;">
+                                    <p>{{ sender.nom ~ ' ' ~ sender.prenoms }} vous demande un règlement de {{ paimentInfo.montant }} {{ paimentInfo.currency }} pour {{ paimentInfo.paymentMotif }}</p>
+                                </div>
+                                <input type="hidden"  id="recharge_transactionRef">
+                                 <div style="display: flex;flex-direction: row;justify-content: center;">
+                                     <a href="{{ path('rejeter_reglement_paiement',{uniqueId:paimentInfo.uniqueId}) }}">
+                                         <button id="rejet-reglement" type="button"  style=" margin: 0 10px;
+      border: 0 !important;border-radius: 0 !important; color:white !important;"  class="btn btn-danger btn-lg mt-lg">
+                                             <span class="icon icon-lg"><i class="fa fa-times"></i></span> Rejeter
+                                         </button>
+                                     </a>
+
+                                    <button id="confirm-reglement" data-validate="{{ path('reglement_valider_reglement') }}" data-amount="{{ paimentInfo.montant }}" data-guid="{{ paimentInfo.uniqueId }}" data-url="{{ path('reglement_confirmer_reglement') }}" type="button"  style="margin: 0 10px;
+      border: 0 !important;border-radius: 0 !important; color:white !important;"  class="btn btn-success btn-lg mt-lg">
+                                        <span class="icon icon-lg"><i class="fa fa-check"></i></span>Régler
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                        <div id="another-step-container"></div>
+                    </div>
+                    {#<div class="col-md-6 col-lg-offset-3">
+                        <section class="panel" >
+                            <div class="panel-body">
+                                <div id="renderQrCode" data-el="pay_number"></div>
+                                <div id="render-paiement-info"></div>
+                            </div>
+                            <div class="input-group mb-md">
+                                <input type="hidden" data-url="{{ path('reglement_paiement_process') }}" id="pay_number" class="form-control">
+                            </div>
+
+                        </section>
+                    </div>#}
+                </div>
+            </section>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('#confirm-reglement').click(function (){
+            $('#another-step-container').load($(this).attr('data-url'),{uniqueId:$(this).attr('data-guid')},function (x,h,s){
+                 $('#panel-transaction-form').fadeOut();
+            });
+        });
+        $('body').on('click','#backAction',function(){
+            $('#panel-transaction-form').fadeIn();
+            $('#another-step-container').html('');
+        })
+        $('body').on('click','.bpa-payment-item',function(){
+            $(this).addClass('bpay-payment-item-active').siblings('div.bpa-payment-item').removeClass('bpay-payment-item-active');
+            $('#reglement_paymentMethodType').val($(this).attr('data-provider-code'));
+            $('#paymentBtnButtonBpay').fadeOut();
+            reloadPaymentForm();
+        })
+        $('body').on('click','#paymentBtnButtonMomo',function (){
+            event.preventDefault();
+            showLoading();
+            if(!$('#paymentBtnButtonMomoForm').validate()){
+                return false;
+            }
+            $('.processing').css('display','block');
+            $(this).closest('form').ajaxSubmit({
+                error: function(data) {  console.log(data); },
+                success: function(data) {
+                    console.log(data.payload);
+                    let payload = data.payload.requestId;
+                    let status = data.payload.status;
+                    switch (status){
+                        case 'SUCCESSFUL':
+                            $('#recharge_transactionRef').val(payload);
+                            sell();
+                            break;
+                        default:
+                            $('#process-control').html(data.widgetFail);
+                            /* setTimeout(function(){
+                                 $('#process-control').html('');
+                             },2000)*/
+                            break;
+                    }
+                },
+            });
+        });
+        function reloadPaymentForm(){
+            let currentProvider = $('#reglement_paymentMethodType').val();
+            if(currentProvider === 'BPAY'){
+                $('#virement-container-js').html('');
+                $('#paymentBtnButtonBpay').fadeIn();
+            }else{
+                let payData = {
+                    amount: $('#confirm-reglement').attr('data-amount'),
+                    providerCode:currentProvider
+                }
+                $('#virement-container-js').load($('#reglement_paymentMethodType').attr('data-url'),{payData:JSON.stringify(payData)},function (responseText, textStatus, XMLHttpRequest){});
+            }
+        }
+        $('body').on('click','#paymentBtnButtonBpay',function(){
+            showLoading();
+            sell();
+        });
+        function closeLoading(){
+            $('#process-control').html('');
+        }
+        function  showLoading(){
+            $('#process-control').html(`<div class="processing" style="  position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999999999;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;">
+                <div class="lds-spinner" style="
+display: inline-block;
+position: relative;
+top:50%;
+left: 50%;
+transform: translate(-50%,-50%);
+width: 80px;
+height: 80px;
+">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>`);
+        }
+        function sell(){
+            let paymentMethod = $('#reglement_paymentMethodType').val();
+            let transfertRef = $('#recharge_transactionRef').val();
+            let amount = $('#confirm-reglement').attr('data-amount');
+
+            let reglementUniqueId = $('#confirm-reglement').attr('data-guid');
+            $.ajax({
+                url: $('#confirm-reglement').attr('data-validate'),
+                type: 'POST',
+                data: ({
+                    paymentMethod: paymentMethod,
+                    transfertRef: transfertRef,
+                    amount : amount,
+                    uniqueId : reglementUniqueId,
+                }),
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    switch (data.status) {
+                        case 'SUCCESS':
+                            $('#another-step-container').html(data.widgetSuccess);
+                            setTimeout(function(){
+                                window.location.href = data.redirectUrl;
+                            },5000)
+                            break;
+                        default:
+                            $('.transfer-error-confirm').text(data.errorMessage).addClass('alert-danger alert');
+                            closeLoading();
+                            break;
+
+                    }
+                },
+                error:function (error){
+                    console.log(error)
+                }
+            });
+        }
+    </script>
+{% endblock %}

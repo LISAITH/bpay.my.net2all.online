@@ -1,0 +1,86 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Rechargement B-PAY{% endblock %}
+{% block sideBar %}
+    {{ render(path('member_menu_left')) }}
+{% endblock %}
+{% block body %}
+    <section class="content-wrapper">
+        {% include 'shared/adminLTE/_breadcrumb.html.twig' with {'title':'Rechargement B-Pay'} %}
+    {#    <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 col-lg-offset-3" id="container-v2">
+                        <div class="tabs" style="position: relative;">
+                            <div id="process-control"></div>
+                            <ul class="nav nav-tabs nav-justified">
+                                <li class="active">
+                                    <a style="cursor: pointer;" data-id="qrCode" data-toggle="tab" class="text-center tab-pane-js"><i class="fa fa-camera"></i>&nbsp;Code QR</a>
+                                </li>
+                                <li>
+                                    <a style="cursor: pointer;" data-id="other"  data-toggle="tab" class="text-center tab-pane-js"><i class="fa fa-mobile"></i>&nbsp;Autres</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content"  style="position: relative;">
+                                <div id="qrCode" class="tab-pane active">
+                                    <div style="display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                                        <div class="qrCode_container" style="display: flex;flex-direction: row;justify-content: center;align-items: center;">
+                                            <div style="width: 250px;height: 250px;">
+                                                <img style="width: 100%; height: 100%;object-fit: cover;" src="{{ qr_code_path(eCashAccount.numeroCompte) }}">
+                                            </div>
+                                        </div>
+                                        <br/>
+                                        <a href="{{ path('member_downloadQrCode') }}" download>
+                                            <button type="button"  data-url="{{ path('member_downloadQrCode') }}" class="mb-xs mt-xs mr-xs btn btn-dark"><span><i class="fa fa-download"></i></span>&nbsp;Télécharger Code QR</button>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div id="other" class="tab-pane tab-pane-js">
+                                    <div class="d-flex flex-col justify-content-content-center align-items-center">
+                                        <h4 class="text-center">Choisissez la méthode de paiement</h4>
+                                        <div  class="bpay-payment-item-list-container">
+                                            {% for item in paymentMethodList %}
+                                                {% set isActive = (item.id is same as (defaultActive.id)) ? 'bpay-payment-item-active':'' %}
+                                                <div data-provider-code="{{ item.providerCode }}" class="bpa-payment-item {{ isActive }}">
+                                                    <img
+                                                            class="rounded-full ring ring-white dark:ring-navy-700"
+                                                            src="{{ asset('/assets/images/' ~ item.brand) }}"
+                                                            alt="avatar"
+                                                    />
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <br/>
+                                    {{ form_start(rechargeForm) }}
+                                    <div class="block">
+                                        <input type="hidden" name="login_form[_csrf_token]" value="{{ csrf_token('authenticate') }}">
+
+                                        {{ form_row(rechargeForm._token) }}
+                                    </div>
+                                    <div class="form-group mb-md" >
+                                        <div class="col-md-8 col-md-offset-2">
+                                            <label>Montant à recharger</label>
+                                            {{ form_widget(rechargeForm.montant)}}
+                                        </div>
+                                    </div>
+                                    {{ form_row(rechargeForm.paymentMethodType) }}
+                                    {{ form_row(rechargeForm.transactionRef) }}
+
+                                    {{ form_end(rechargeForm,{render_rest:false}) }}
+                                    <div id="reload-form-url-js" data-url="{{ path('business_payment_item_form') }}"></div>
+
+                                    <div id="virement-container-js"></div>
+                                    </br>
+                                </div>
+                            </div>
+                        </div> </div></div>
+                <!-- /.row -->
+            </div>
+        </section>#}
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/assets/js/recharge.js') }}"></script>
+{% endblock %}

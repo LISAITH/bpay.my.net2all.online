@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Règlement B-PAY{% endblock %}
+
+{% block body %}
+    <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Règlement B-PAY'} %}
+                <div class="row">
+                    <div class="col-md-6 col-lg-offset-3">
+                        <section class="panel steping step1" id="step1">
+                            <header class="panel-heading">
+                                <h2 class="panel-title">Générer un lien de paiement</h2>
+                            </header>
+                            <div class="panel-body">
+                                {{ form_start(formView) }}
+                                <div class="form-group mb-sm mt-sm">
+                                    <label>Montant</label>
+                                    <div class="input-group mb-md">
+                                        {{ form_widget(formView.montant,{'attr':{'style':'width:100%;'}}) }}
+                                        <span class="input-group-addon btn-dark">XOF</span>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-sm mt-sm" >
+                                    <label>Motif du règlement</label>
+                                    <div class="input-group input-group-icon">
+                                        {{ form_widget(formView.payment_motif,{'attr':{'style':'width:100%;'}}) }}
+                                    </div>
+                                </div>
+                                <button id="account-to-account-transfer-confirm" type="submit"  style="
+  border: 0 !important;border-radius: 0 !important; color:white !important;"  class="btn btn-dark btn-block btn-lg mt-lg">
+                                    <span class="icon icon-lg"><i class="fa fa-link"></i></span>&nbsp;Générer mon lien<span id="recharge-montant-js" style="letter-spacing: 1px;"></span>
+                                </button>
+                                {{ form_end(formView,{render_rest:false}) }}
+                           </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+{% endblock %}

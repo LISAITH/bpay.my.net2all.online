@@ -1,0 +1,187 @@
+
+{{ form_start(formView,{'attr':{'id':'SAccountToSAccountForm'}}) }}
+<div class="block">
+    {{ form_row(formView._token) }}
+</div>
+<section class="panel steping step1 animate__animated animate__fadeIn" id="step1">
+    <div class="card card-dark">
+        <div class="card-header">
+            <h3 class="card-title">Sous-compte&nbsp;<span><i class="fas fa-arrow-alt-circle-right"></i></span>&nbsp;Sous-compte</h3>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i style="cursor: pointer;" id="close-transfert-widget-js" class="fas fa-minus"></i>
+                </button>
+            </div>
+            <!-- /.card-tools -->
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div id="renderQrCode" data-el="cp_to_cp_accountNumber"></div>
+            <div style="display: none;margin-top: 2px;" id="cancelSCanQrCode" class="btn btn-danger btn-group-sm"><span><i class="fa fa-arrow-left"></i></span></div>
+            <div id="transfer-container">
+                <div class="form-group mb-sm  mt-sm" >
+                    <label>Choisissez le sous-compte à débiter</label>
+                    <div class="input-group input-group-icon" style="position: relative;width: 100%;">
+                        {{ form_widget(formView.subAccount,{'attr':{'style':'width:100%;'}}) }}
+                    </div>
+                </div>
+                <div class="form-group mb-sm  mt-sm" id="momo_pay_form_holderName_container">
+                    <label>Numéro sous compte à créditer</label>
+                    <div class="input-group input-group-icon">
+                        <div id="renderQrCode" style="position: absolute;top: 0px;right: 0; z-index: 500000">
+                            <img id="scanQrCodeId" style="cursor: pointer;" width="40" height="40" src="{{ asset('/assets/images/scan-btn.png') }}" alt="Scan bouton" class="img-circle" />
+                        </div>
+                        {{ form_widget(formView.accountNumber)}}
+                    </div>
+                </div>
+                <div class="form-group mb-sm  mt-sm" id="momo_pay_form_holderName_container">
+                    <label>Montant</label>
+                    <div class="input-group input-group-icon">
+                        {{ form_widget(formView.amount)}}
+                    </div>
+                </div>
+                <div class="transfer-error" style="font-weight: 600"></div>
+                <button data-transaction-url="{{ path('transaction_souscompte_a_souscompte') }}" id="transfer-saccount-to-saccount-btn-js" type="submit"  style="
+
+          border: 0 !important;border-radius: 2px !important; color:white !important;"  class="btn btn-dark btn-block btn-lg mt-lg">
+                    <span class="icon icon-lg"><i class="fa fa-send"></i></span>&nbsp;Valider
+                </button>
+            </div>
+            <div data-url="{{ path('transaction_bpay_form_type') }}" id="panel-transaction-form"></div>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</section>
+<!-- /.card -->
+{{ form_end(formView,{render_rest:false}) }}
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $('body').on('keyup change','.form-error',function (){
+            if($(this).hasClass('form-error-active')){
+                $(this).removeClass('form-error-active');
+            }
+        });
+        $('body').on('click','#transfer-saccount-to-saccount-btn-js',function (){
+            event.preventDefault();
+            $('.form-error').removeClass('form-error-active');
+            if(!$('#SAccountToSAccountForm').validate()){
+                $('.form-error').addClass('form-error-active');
+                return false;
+            }
+            let accountNumber = $('#sc_to_sc_subAccount').val();
+            let receiveAccountNumber = $('#sc_to_sc_accountNumber').val();
+            let amount = $('#sc_to_sc_amount').val();
+            if(accountNumber.length <= 0 || amount.length <= 0 || receiveAccountNumber.length <= 0){
+                $('.form-error').addClass('form-error-active');
+                return false;
+            }
+            makeTransferAccountToAccount(accountNumber,amount,receiveAccountNumber);
+        });
+        function makeTransferAccountToAccount(accountNumber,amount, receiveAccountNumber){
+            $('.transfer-error').removeClass('alert-danger alert').text('');
+            let retValue = false;
+            $.ajax({
+                url: $('#transfer-saccount-to-saccount-btn-js').attr('data-transaction-url'),
+                type: 'POST',
+                async: false, // Mode synchrone
+                data: ({accountNumber: accountNumber, step: 1, amount : amount,receiveAccountNumber:receiveAccountNumber}),
+                dataType: "json",
+                success: function(data){
+                    let step = data.step;
+                    let status = data.status;
+                    switch (status){
+                        case 'SUCCESS':
+                            $('#another-step-container').html(data.widgetConfirm);
+                            $('.steping').fadeOut();
+                            break;
+                        case 'ERROR':
+                            $('.transfer-error').text(data.errorMessage).addClass('alert-danger alert');
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                error:function (error){
+                    console.log(error)
+                }
+            });
+            return retValue;
+        }
+        $('body').on('click','#saccount-to-saccount-transfer-confirm',function(){
+            $('.transfer-error').text('').removeClass('alert-danger alert');
+            showLoading();
+            let accountNumber = $('#sc_to_sc_subAccount').val();
+            let receiveAccountNumber = $('#sc_to_sc_accountNumber').val();
+            let codeConfirmation = $('#codeConfirmation').val();
+            let amount = $('#sc_to_sc_form_amount').val();
+            $.ajax({
+                url: $('#transfer-saccount-to-saccount-btn-js').attr('data-transaction-url'),
+                type: 'POST',
+                async: false, // Mode synchrone
+                data: ({
+                    accountNumber: accountNumber,
+                    step: 2,
+                    amount : amount,
+                    receiveAccountNumber:receiveAccountNumber,
+                    codeConfirmation : codeConfirmation,
+                }),
+                dataType: "json",
+                success: function(data){
+                    switch (data.status) {
+                        case 'SUCCESS':
+                            $('#another-step-container').html(data.widgetSuccess);
+                            setTimeout(function(){
+                                window.location.href = data.redirectUrl;
+                            },5000)
+                            break;
+                        default:
+                            $('.transfer-error-confirm').text(data.errorMessage).addClass('alert-danger alert');
+                            closeLoading();
+                            break;
+                    }
+                },
+                error:function (error){
+                    console.log(error)
+                }
+            });
+        });
+        function closeLoading(){
+            $('#process-control').html('');
+        }
+        function  showLoading(){
+            $('#process-control').html(`<div class="processing" style="  position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999999999;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;">
+                <div class="lds-spinner" style="
+display: inline-block;
+position: relative;
+top:50%;
+left: 50%;
+transform: translate(-50%,-50%);
+width: 80px;
+height: 80px;
+">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>`);
+        }
+    </script>
+{% endblock %}

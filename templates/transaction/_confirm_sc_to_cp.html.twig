@@ -1,0 +1,55 @@
+<section class="panel animate__animated animate__fadeIn {{ 'step' ~ step }}" >
+    <div class="card card-dark">
+        <div class="card-header" style="position: relative;">
+            <h6 style="font-size: 16px;text-align: center;" class="panel-title">Confirmation transfert
+                <br/>Sous-compte <span><i class="fas fa-arrow-alt-circle-right"></i></span> Cpte-principal </h6>
+            <div class="card-tools" style="position: absolute;right: 6px;top: 4px;">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <a id="backAction"  style="cursor: pointer;" class="fas fa-1x fa-arrow-alt-circle-left"></a>
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+        <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+            <div class="user-box-transfer">
+                <div style="display: flex;flex-direction: column;align-items: center;">
+                    <div style="width: 50px;margin-right: 5px; height: 50px;border-radius: 50%; overflow: hidden;" class="profile-picture">
+                        <img style="width:100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/'~ receiverImgProfil) }}" class="img-circle" />
+                    </div>
+                    <div style="display: flex;flex-direction: column;">
+                        <span style="color:#333333;font-weight: bold;" class="role">{{ eCashAccount.numeroSousCompte }}</span>
+
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div  style="background-color: grey;color:white; min-width: 50px; max-width: 50px; min-height: 50px; max-height: 50px;border-radius: 50%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                <i class="fa fa-2x fa-arrow-right"></i>
+            </div>
+            <div class="user-box-transfer">
+                <div style="display: flex;flex-direction: column;align-items: center;">
+                    <div style="width: 50px;margin-right: 5px; height: 50px;border-radius: 50%; overflow: hidden;" >
+                        <img style="width:100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/'~ senderProfilImg) }}" class="img-circle" />
+                    </div>
+                    <div  style="display: flex;flex-direction: column;">
+                        <span style="color:#333333;font-weight: bold;"  class="role">{{ senderECashAccount.numeroCompte }}</span>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br/>
+        <div class="alert" style="font-weight: bold;background-color: #f0f0f0;color:#3c3c3c;">
+            Transfert de {{ amount ~ ' ' ~ currency }}&nbsp;({{ frais ?? 0 ~ ' ' ~ currency ~' de frais appliqué' }})
+        </div>
+        <div class="form-group" style="display: flex;flex-direction: row;justify-content: center;align-items: center;width: 100%;">
+
+            <input type="number" style="width: 60%;"  id="codeConfirmation" required placeholder="Votre code secret à 4 chiffres" class="form-control">
+        </div>
+        <div class="transfer-error-confirm"></div>
+        <button id="saccount-to-account-transfer-confirm" type="button"  style="border-radius: 2px !important; color:white !important;"  class="btn btn-success btn-success btn-block btn-lg mt-lg">
+            <span class="icon icon-lg"><i class="fas fa-send"></i></span> Confirmer
+        </button>
+    </div>
+</section>

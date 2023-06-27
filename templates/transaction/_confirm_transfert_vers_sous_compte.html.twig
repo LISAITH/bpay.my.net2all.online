@@ -1,0 +1,54 @@
+<section class="panel animate__animated animate__fadeIn {{ 'step' ~ step }}" style="position: relative;">
+    <div id="process-control">
+    </div>
+    <header class="panel-heading">
+        <div class="panel-actions">
+            <a id="backAction-transfert"  style="cursor: pointer;" class="fa fa-2x fa-arrow-circle-o-left"></a>
+        </div>
+        <h6 style="font-size: 16px;" class="panel-title">Confirmation Transfert {{ service.libelle }}&nbsp;<span><i class="fa fa-arrow-circle-o-right"></i></span>&nbsp;{{ service.libelle }} </h6>
+    </header>
+    <div class="panel-body">
+        <div style="display: flex;flex-direction: row;justify-content: space-around;align-items: center;">
+            <div class="user-box-transfer">
+                <div style="display: flex;flex-direction: column;">
+                    <div style="width: 50px;margin-right: 5px; height: 50px;border-radius: 50%; overflow: hidden;" class="profile-picture">
+                        <img style="width:100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/'~ senderProfilImg) }}" class="img-circle" />
+                    </div>
+                    <div style="display: flex;flex-direction: column;">
+                        <span style="color:#333333;font-weight: bold;" class="role">nº{{ senderECashAccount.numeroSousCompte }}</span>
+                        {{ sender.nom  }}
+                    </div>
+                    </a>
+                </div>
+            </div>
+            <div  style="background-color: grey;color:white; min-width: 50px; max-width: 50px; min-height: 50px; max-height: 50px;border-radius: 50%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                <i class="fa fa-2x fa-arrow-right"></i>
+            </div>
+            <div class="user-box-transfer">
+                <div style="display: flex;flex-direction: column;">
+                    <div style="width: 50px;margin-right: 5px; height: 50px;border-radius: 50%; overflow: hidden;" class="profile-picture">
+                        <img style="width:100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/'~ receiverImgProfil) }}" class="img-circle" />
+                    </div>
+                    <div style="display: flex;flex-direction: column;">
+                        <span style="color:#333333;font-weight: bold;" class="role">nº{{ eCashAccount.numeroSousCompte }}</span>
+                        {{ receiveAccount.nom  }}
+                    </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+        <br/>
+        <div class="alert" style="font-weight: bold;background-color: #f0f0f0;color:#3c3c3c;">
+            Transfert de {{ amount ~ ' ' ~ currency }}&nbsp;({{ frais ?? 0 ~ ' ' ~ currency ~' de frais appliqué' }})
+        </div>
+        <div class="form-group" style="display: flex;flex-direction: row;justify-content: center;align-items: center;width: 100%;">
+            <input type="number" style="width: 60%;"  id="codeConfirmation" required placeholder="Votre code secret à 4 chiffres" class="form-control">
+        </div>
+        <div class="transfer-error-confirm"></div>
+        <button id="saccount-to-saccount-v2-transfer-confirm" type="button"  style="background-color: #44403c !important;
+  border: 0 !important;border-radius: 0 !important; color:white !important;"  class="btn btn-block btn-lg mt-lg">
+            <span class="icon icon-lg"><i class="fa fa-send"></i></span> Confirmer
+        </button>
+    </div>
+</section>

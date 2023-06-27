@@ -1,0 +1,405 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} Tableau de Bord {% endblock %}
+
+{% block sideBar %}
+    {{ render(path('member_menu_left')) }}
+{% endblock %}
+{% block body %}
+{#    <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Tableau de Bord'} %}
+
+                <!-- main: body -->
+                <div class="row">
+                    <div class="col-md-6 col-lg-12 col-xl-6">
+                        <div class="row">
+                            <div class="col-md-12 col-lg-6 col-xl-6">
+                                <section class="panel panel-featured-left panel-featured-primary">
+                                    <div class="panel-body">
+                                        <div class="widget-summary">
+                                            <div class="widget-summary-col widget-summary-col-icon">
+                                                <div class="summary-icon" style="background-color: #44403c;">
+                                                    <i class="fa fa-usd"></i>
+                                                </div>
+                                            </div>
+                                            <div class="widget-summary-col">
+                                                <div class="summary">
+                                                    <h4 class="title">En Solde</h4>
+                                                    <div class="info">
+                                                        <strong class="amount">{{ eCashAccount.solde ~ ' XOF' }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="summary-footer">
+                                                    <a href="{{ path('business_recharge') }}" class="text-muted text-uppercase">RECHARGER</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-md-12 col-lg-6 col-xl-6">
+                                <section class="panel panel-featured-left panel-featured-secondary">
+                                    <div class="panel-body">
+                                        <div class="widget-summary">
+                                            <div class="widget-summary-col widget-summary-col-icon">
+                                                <div class="summary-icon" style="background-color: #ef4444;">
+                                                    <i class="fa fa-exchange"></i>
+                                                </div>
+                                            </div>
+                                            <div class="widget-summary-col">
+                                                <div class="summary">
+                                                    <h4 class="title">Total transactions</h4>
+                                                    <div class="info">
+                                                        <strong class="amount">{{ transactionListCount }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="summary-footer">
+                                                    <a href="{{ path('member_transaction_list') }}" class="text-muted text-uppercase">VISUALISER</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-md-12 col-lg-6 col-xl-6">
+                                <section class="panel panel-featured-left panel-featured-tertiary">
+                                    <div class="panel-body">
+                                        <div class="widget-summary">
+                                            <div class="widget-summary-col widget-summary-col-icon">
+                                                <div class="summary-icon" style="background-color: #a855f7;">
+                                                    <i class="fa fa-user"></i>
+                                                </div>
+                                            </div>
+                                            <div class="widget-summary-col">
+                                                <div class="summary">
+                                                    <h4 class="title">Total Sous Comptes</h4>
+                                                    <div class="info">
+                                                        <strong class="amount">{{ eCashSubAccounts|length }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="summary-footer">
+                                                    <a href="{{ path('member_sous_comptes') }}" class="text-muted text-uppercase">VISUALISER</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                            <div class="col-md-12 col-lg-6 col-xl-6">
+                                <section class="panel panel-featured-left panel-featured-quartenary">
+                                    <div class="panel-body">
+                                        <div class="widget-summary">
+                                            <div class="widget-summary-col widget-summary-col-icon">
+                                                <div class="summary-icon bg-quartenary" style="background-color: #a3e635;">
+                                                    <i class="fa fa-credit-card"></i>
+                                                </div>
+                                            </div>
+                                            <div class="widget-summary-col">
+                                                <div class="summary">
+                                                    <h4 class="title">Comptes bancaires</h4>
+                                                    <div class="info">
+                                                        <strong class="amount">{{ banks|length }}</strong>
+                                                    </div>
+                                                </div>
+                                                <div class="summary-footer">
+                                                    <a class="text-muted text-uppercase">VISUALISER</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        </div>
+                        {% if transactions|length  > 0 %}
+                        <div class="row">
+                           <div class="col-md-6 col-lg-12 col-xl-6">
+                               <section class="panel">
+                                   <div class="panel-body">
+                                       <div class="row">
+                                           <div class="col-lg-8">
+                                               <div>
+                                                   <select id="select">
+                                                       <option value="transaction">Transaction</option>
+                                                   </select>
+                                                   <div>
+                                                    <div style="visibility: hidden;" id="data-transactions" data-val="{{transactions|json_encode   }}"></div>
+                                                       <canvas  id="nb-transaction"></canvas>
+                                                   </div>
+                                               </div>
+                                           </div>
+                                         #}{#  <div class="col-md-4">
+                                               <div style="visibility: hidden;" id="data-all"></div>
+                                               <canvas  id="nb-all"></canvas>
+                                           </div>#}{#
+                                           </div>
+                                       </div>
+                                   </div>
+                           </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <!-- end: body -->
+            </section>
+        </div>
+    </section>#}
+    <div class="content-wrapper">
+        {% include 'shared/adminLTE/_breadcrumb.html.twig' with {'title':'Tableau de bord'} %}
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <!-- Info boxes -->
+                <div class="row">
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="info-box bg-info">
+                            <span class="info-box-icon"><i class="far fa-usd"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Solde Compte</span>
+                                <span class="info-box-number">{{ eCashAccount.solde|number_format(2, ',', ' ') ~ ' XOF' }}&nbsp;<span><i class="fas fa-eye"></i></span></span>
+                            </div>
+
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="info-box bg-success">
+                            <span class="info-box-icon"><i class="fas fa-exchange"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Transactions</span>
+                                <span class="info-box-number">{{ transactionListCount }}&nbsp;<span><i class="fas fa-eye"></i></span></span>
+
+
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="info-box bg-warning">
+                            <span class="info-box-icon"><i class="fas fa-bank"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Sous-Comptes</span>
+                                <span class="info-box-number">{{ eCashSubAccounts|length }}&nbsp;<span><i class="fas fa-eye"></i></span></span>
+
+
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-md-3 col-sm-6 col-12">
+                        <div class="info-box bg-danger">
+                            <span class="info-box-icon"><i class="fas fa-bank"></i></span>
+
+                            <div class="info-box-content">
+                                <span class="info-box-text">Total Comptes Bancaires</span>
+                                <span class="info-box-number">{{ banks|length }}&nbsp;<span><i class="fas fa-eye"></i></span></span>
+
+
+                            </div>
+                            <!-- /.info-box-content -->
+                        </div>
+                        <!-- /.info-box -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+                <!-- /.row -->
+                <!-- /.row -->
+                <!-- /.row -->
+            </div><!--/. container-fluid -->
+        </section>
+        <!-- /.content -->
+        <!-- Main content -->
+        <section class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    {% if transactionListCount > 0 %}
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Dernières transactions</h3>
+                            </div>
+                            <div class="card-body">
+                                <div style="visibility: hidden;" id="data-transactions" data-val="{{transactions|json_encode   }}"></div>
+                                 <canvas  id="nb-transaction"></canvas>
+                            </div>
+                        </div>
+                       {# <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Mes règlements</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10px">#</th>
+                                        <th>Task</th>
+                                        <th>Progress</th>
+                                        <th style="width: 40px">Label</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>1.</td>
+                                        <td>Update software</td>
+                                        <td>
+                                            <div class="progress progress-xs">
+                                                <div class="progress-bar progress-bar-danger" style="width: 55%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-danger">55%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2.</td>
+                                        <td>Clean database</td>
+                                        <td>
+                                            <div class="progress progress-xs">
+                                                <div class="progress-bar bg-warning" style="width: 70%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-warning">70%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>3.</td>
+                                        <td>Cron job running</td>
+                                        <td>
+                                            <div class="progress progress-xs progress-striped active">
+                                                <div class="progress-bar bg-primary" style="width: 30%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-primary">30%</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>4.</td>
+                                        <td>Fix and squish bugs</td>
+                                        <td>
+                                            <div class="progress progress-xs progress-striped active">
+                                                <div class="progress-bar bg-success" style="width: 90%"></div>
+                                            </div>
+                                        </td>
+                                        <td><span class="badge bg-success">90%</span></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                            <div class="card-footer clearfix">
+                                <ul class="pagination pagination-sm m-0 float-right">
+                                    <li class="page-item"><a class="page-link" href="#">&laquo;</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                    <li class="page-item"><a class="page-link" href="#">&raquo;</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.card -->#}
+                    </div>
+                    {% endif %}
+                    <!-- /.col -->
+                    <div class="col-md-6">
+                        {% if lastRecharges|length > 0  %}
+                        <!-- /.card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Derniers rechargements</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10px">ID</th>
+                                        <th>Compte B-PAY</th>
+                                        <th>Montant</th>
+                                        <th style="width: 40px">Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for rechargeItem in lastRecharges %}
+                                        {% if loop.index <= 5 %}
+                                        <tr>
+                                            <td>{{ rechargeItem.id }}</td>
+                                            <td style="width: 30%;">{{ rechargeItem.compteBPay.numeroCompte }}</td>
+                                            <td style="width: 30%;"><span class="badge bg-success">+&nbsp;{{ rechargeItem.montant  ~ ' FCFA '}}</span></td>
+                                            <td style="width: 30%;">{{ rechargeItem.dateRecharge|date('Y-m-d h:m:d') }}</td>
+                                         </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        {% endif %}
+                        <!-- /.card -->
+                        <!-- /.card -->
+                        {% if lastTransfertList|length  > 0 %}
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title">Derniers transferts B-PAY</h3>
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th style="width: 10px">ID</th>
+                                        <th>B-PAY</th>
+                                        <th>Receveur</th>
+                                        <th>Montant</th>
+                                        <th style="width: 40px">Date</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for transItem in lastTransfertList %}
+                                        {% if loop.index <= 5 %}
+                                            <tr>
+                                                <td>{{ transItem.id }}</td>
+                                                <td style="width: 25%;">{{ transItem.idCompteEnvoyeur.numeroCompte }}</td>
+                                                <td style="width: 25%;">{{ transItem.idCompteReceveur.numeroCompte }}</td>
+                                                <td style="width: 25%;"><span class="badge bg-danger">-&nbsp;{{ transItem.montant  ~ ' FCFA '}}</span></td>
+                                                <td style="width: 25%;">{{ transItem.dateTransaction|date('Y-m-d h:m:d') }}</td>
+                                            </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.card-body -->
+                        </div>
+                        {% endif %}
+                        <!-- /.card -->
+                    </div>
+                    <!-- /.col -->
+                </div>
+
+
+            </div><!-- /.container-fluid -->
+        </section>
+        <!-- /.content -->
+    </div>
+{% endblock %}
+  {% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('stats') }}
+{% endblock %}
+
+

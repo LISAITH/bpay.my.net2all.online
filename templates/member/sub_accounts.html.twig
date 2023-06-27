@@ -1,0 +1,177 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} Tableau de Bord {% endblock %}
+{% block sideBar %}
+    {{ render(path('member_menu_left')) }}
+{% endblock %}
+{% block body %}
+
+        <section class="content-wrapper">
+            {% include 'shared/adminLTE/_breadcrumb.html.twig' with {'title':'Mes sous-comptes'} %}
+            <section class="content">
+                <br class="container-fluid">
+                <div class="row">
+                    {% for account in subAccounts %}
+
+                        <div class="col-md-3 col-sm-6 col-12">
+                            <div class="info-box bg-default">
+
+
+                                <div class="info-box-content">
+                                    <span class="info-box-text">{{ account.numeroSousCompte  }}</span>
+                                    <span class="info-box-number">{{ account.solde|number_format(2, ',', ' ') ~ ' XOF' }}&nbsp;</span>
+                                </div>
+                                <div>
+                                    <a href="{{ path('transaction_transfert_entre_sous_compte',{id:account.id}) }}">
+
+                                    <button class="btn btn-sm btn-success">  <i class="far fa-arrow-alt-circle-right"></i></button></a>
+                                    <a href="{{ path('transaction_transfert_bpay',{'type':'SC_TO_CP',scId:account.id}) }}">
+
+                                    <button class="btn btn-sm btn-dark"><i class="far fa-arrow-alt-circle-up"></i></button>  </a>
+                                </div>
+                            </div>
+                            <!-- /.info-box -->
+                        </div>
+                    {% endfor %}
+                </div>
+                 {#   <div class="row justify-content-center">
+                        <div class="col-md-">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Liste des sous-comptes</h3>
+                                </div>
+                                <div class="card-body">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Libellé service</th>
+                                            <th>Nº Sous compte</th>
+                                            <th>Solde</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for account in subAccounts %}
+                                            <tr class="gradeX">
+                                                <td>{{ account.service_id }}</td>
+                                                <td>
+                                                    <div style="display: flex;flex-direction: row;justify-content: start;align-items: center;">
+                                                        {{ account.numeroSousCompte|upper }} -
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="display: flex;flex-direction: row;">
+                                                        <a href="{{ path('member_dashboard') }}" data-toggle="dropdown">
+                                                            <figure class="profile-picture">
+                                                                <img width="20" height="20"  src="{{ asset('/assets/images/coin.png') }}" alt="Joseph Doe" class="img-circle" data-lock-picture="assets/images/!logged-user.jpg" />
+                                                            </figure>
+                                                        </a>
+                                                        <span style="color:black;font-weight: bold">{{ account.solde  }} XOF</span>
+                                                    </div>
+                                                </td>
+                                                <td >
+                                                    <div class="action" style="width: auto;">
+                                                        <a href="{{ path('transaction_transfert_entre_sous_compte',{id:account.id}) }}">
+                                                            <button class="btn mx-2 btn-sm btn-success"><span><i class="fa fa-arrow-circle-o-right"></i></span>&nbsp;Transfert vers sous-compte</button>
+                                                        </a>
+                                                        <a href="{{ path('transaction_transfert_bpay',{'type':'SC_TO_CP',scId:account.id}) }}">
+                                                            <button class="btn mx-2 btn-sm btn-primary"><span><i class="fa fa-arrow-circle-o-up"></i></span>&nbsp;Transfert vers compte principal</button>
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>#}
+                <!-- /.row -->
+                </div>
+            </section>
+        </section>
+{#    <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Sous-Comptes'} %}
+
+                <!-- main: body -->
+                <section class="panel">
+                    <header class="panel-heading">
+                       #}{# <div class="panel-actions">
+                            <a href="#" class="fa fa-caret-down"></a>
+                            <a href="#" class="fa fa-times"></a>
+                        </div>#}{#
+
+                        <h2 class="panel-title" style="color:black;font-weight: 500;">Liste des sous-comptes</h2>
+                    </header>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped mb-none" id="datatable-details">
+                        <thead>
+                            <tr>
+                                <th>Libellé service</th>
+                                <th>Nº Sous compte</th>
+                                <th>Solde</th>
+                                <th>Actions</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for account in subAccounts %}
+                                <tr class="gradeX">
+                                    <td>{{ account.service.libelle }}</td>
+                                    <td>
+                                        <div style="display: flex;flex-direction: row;justify-content: start;align-items: center;">
+                                            {{ account.numeroSousCompte|upper }} -
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex;flex-direction: row;">
+                                            <a href="{{ path('member_dashboard') }}" data-toggle="dropdown">
+                                                <figure class="profile-picture">
+                                                    <img width="20" height="20"  src="{{ asset('/assets/images/coin.png') }}" alt="Joseph Doe" class="img-circle" data-lock-picture="assets/images/!logged-user.jpg" />
+                                                </figure>
+                                            </a>
+                                            <span style="color:black;font-weight: bold">{{ account.solde  }} XOF</span>
+                                        </div>
+                                    </td>
+                                    <td >
+                                        <div class="action" style="width: auto;">
+                                            <a href="{{ path('transaction_transfert_entre_sous_compte',{id:account.id}) }}">
+                                                <button class="btn mx-2 btn-sm btn-success"><span><i class="fa fa-arrow-circle-o-right"></i></span>&nbsp;Transfert vers sous-compte</button>
+                                            </a>
+                                            <a href="{{ path('transaction_transfert_bpay',{'type':'SC_TO_CP',scId:account.id}) }}">
+                                                <button class="btn mx-2 btn-sm btn-primary"><span><i class="fa fa-arrow-circle-o-up"></i></span>&nbsp;Transfert vers compte principal</button>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- end: body -->
+            </section>
+        </div>
+
+    </section>#}
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('.action-js').mouseenter(function (){
+            $(this).siblings('div.action').fadeIn();
+        }).mouseleave(function (){
+            $(this).siblings('div.action').fadeOut();
+        })
+    </script>
+{% endblock %}

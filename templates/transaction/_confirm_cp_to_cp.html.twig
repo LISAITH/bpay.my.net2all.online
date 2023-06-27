@@ -1,0 +1,67 @@
+<section class="panel animate__animated animate__fadeIn {{ 'step' ~ step }}" style="position: relative;">
+    <div id="process-control">
+    </div>
+    <div class="card card-dark">
+        <div class="card-header">
+        <h6 style="font-size: 16px;text-align: center;" class="panel-title">Confirmation transfert
+            <br/>Cpte principal <span><i class="fas fa-arrow-alt-circle-right"></i></span> Cpte principal </h6>
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <a id="backAction"  style="cursor: pointer;" class="fas fa-arrow-alt-circle-left"></a>
+                </button>
+            </div>
+        </div>
+    <div class="card-body">
+            <div style="display: flex;flex-direction: row;justify-content: space-between;align-items: center;">
+                <div class="user-box-transfer">
+                    <div style="display: flex;flex-direction: column;align-items: center;">
+                        <div style="width: 50px;margin-right: 5px; height: 50px;border-radius: 50%; overflow: hidden;" class="profile-picture">
+                            <img style="width:100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/'~ senderProfilImg) }}" class="img-circle" />
+                        </div>
+                        <div  style="display: flex;flex-direction: column;">
+                            {% if connetedUser.type is same as ('particular') %}
+                                <span class="name">{{ senderECashAccount.particulier.nom  }}</span>
+                            {% elseif connetedUser.type is same as ('enterprise') %}
+                                <span class="name">{{ senderECashAccount.entreprise.nom ~ ' ' ~ senderECashAccount.entreprise.prenoms }}</span>
+                            {% endif %}
+                            <span style="color:#333333;font-weight: bold;" class="role">{{ senderECashAccount.numeroCompte }}</span>
+
+                        </div>
+                    </div>
+                </div>
+                <div  style="background-color: grey;color:white; min-width: 50px; max-width: 50px; min-height: 50px; max-height: 50px;border-radius: 50%;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+                    <i class="fa fa-2x fa-arrow-right"></i>
+                </div>
+                <div class="user-box-transfer">
+                    <div style="display: flex;flex-direction: column;align-items: center;">
+                        <div style="width: 50px;margin-right: 5px; height: 50px;border-radius: 50%; overflow: hidden;" class="profile-picture">
+                            <img style="width:100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/'~ receiverImgProfil) }}" class="img-circle"  />
+                        </div>
+                        <div style="display: flex;flex-direction: column;">
+                         {#   <span class="name">{{ receiver.nom }}</span>#}
+                            <span style="font-weight: bold;color: #333333;" class="role">{{ eCashAccount.numeroCompte }}</span>
+
+                        </div>
+                    </a>
+                </div>
+            </div>
+            </div>
+            <br/>
+            <div class="alert" style="font-weight: bold;background-color: #f0f0f0;color:#3c3c3c;">
+               Transfert de {{ amount ~ ' ' ~ currency }}&nbsp;({{ frais ~ ' ' ~ currency ~' de frais appliqué' }})
+            </div>
+            <div class="form-group" style="display: flex;flex-direction: row;justify-content: center;align-items: center;width: 100%;">
+
+                <input type="number" style="width: 60%;"  id="codeConfirmation" required placeholder="Votre code secret à 4 chiffres" class="form-control">
+            </div>
+            <div class="transfer-error-confirm ">
+
+            </div>
+            <div class="button-wrapper">
+                <button id="account-to-account-transfer-confirm"  type="button"  class="btn button-validated btn-success btn-block btn-lg mt-lg">
+                    <span class="icon icon-lg"><i class="fas fa-send"></i></span> Confirmer  <span id="recharge-montant-js" style="letter-spacing: 1px;"></span>
+                </button>
+            </div>
+
+        </div>
+</section>

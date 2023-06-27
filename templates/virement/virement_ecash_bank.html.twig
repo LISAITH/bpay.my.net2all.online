@@ -1,0 +1,66 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} Virement B-PAY{% endblock %}
+
+{% block body %}
+    <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Virement B-PAY'} %}
+                <div class="row">
+                    <div class="col-md-6 col-lg-offset-3">
+                        <section class="panel steping step1" id="step1">
+                            <header class="panel-heading">
+                                <h2 class="panel-title">Virement B-PAY</h2>
+                            </header>
+                            <div class="panel-body">
+                                {{ form_start(formView) }}
+                                <div class="form-group mb-sm  mt-sm" >
+                                    <label>Nom Bénéficiare</label>
+                                    <div class="input-group input-group-icon">
+                                        {{ form_widget(formView.beneficiaire) }}
+                                    </div>
+                                </div>
+                                <div class="form-group mb-sm  mt-sm" >
+                                    <label>IBAN</label>
+                                    <div class="input-group input-group-icon">
+                                        {{ form_widget(formView.iban) }}
+                                    </div>
+                                </div>
+                                <div class="form-group mt-lg">
+                                    <label>Montant</label>
+                                    <div class="input-group input-group-icon">
+                                        {{ form_widget(formView.montant) }}
+                                    </div>
+                                </div>
+                                <div class="form-group mt-lg">
+                                    <label>Téléverser RIB</label>
+                                    <div class="input-group">
+                                        {{ form_widget(formView.ribFile) }}
+                                    </div>
+                                </div>
+                                {{ form_end(formView,{render_rest:false}) }}
+                                <button id="paymentBtnButtonMomo" type="submit"  style="background-color: #4d87db !important;
+      border: 0 !important;border-radius: 0 !important; color:white !important;"  class="btn btn-block btn-lg mt-lg">
+                                    <span class="icon icon-lg"></span> Valider  <span id="recharge-montant-js" style="letter-spacing: 1px;"></span>
+                                </button>
+                               </div>
+                        </section>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="{{ asset('/assets/js/transfert.js') }}"></script>
+{% endblock %}

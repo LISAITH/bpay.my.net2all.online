@@ -1,0 +1,47 @@
+# This file is the entry point to configure your own Service.
+# Files in the packages/ subdirectory configure your dependencies.
+
+# Put parameters here that don't need to change on each machine where the app is deployed
+# https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
+parameters:
+    API_URL: 'https://business.net2all.online/public/index.php/api'
+    QRCODEIMG: '%kernel.project_dir%/public/qr-code-uploads'
+
+services:
+    # default configuration for Service in *this* file
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your Service.
+        autoconfigure: true # Automatically registers your Service as commands, event subscribers, etc.
+
+    # makes classes in src/ available to be used as Service
+    # this creates a service per class whose id is the fully-qualified class name
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+#    app.twig_extension:
+#        class: App\TwigExtension\AppExtension
+#        public: false
+#        tags:
+#            - { name: twig.extension }
+#
+#    App\DataProvider\DependencyDataProvider:
+#        arguments: ['%kernel.project_dir%']
+#        tags: [{name: 'api_platform.item_data_provider'}]
+#        autoconfigure: true
+#
+#    App\DataProvider\PaiementMobileDataProvider:
+#        tags: [ { name: 'api_platform.item_data_provider' } ]
+#        autoconfigure: true
+#
+#    App\DataProvider\PaiementCarteDataProvider:
+#        tags: [ { name: 'api_platform.item_data_provider' } ]
+#        autoconfigure: true
+
+
+
+    # add more service definitions when explicit configuration is needed
+    # please note that last definitions always *replace* previous ones

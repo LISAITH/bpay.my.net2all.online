@@ -1,0 +1,214 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %}Transferts B-PAY{% endblock %}
+{% block sideBar %}
+    {{ render(path('member_menu_left')) }}
+{% endblock %}
+{% block body %}
+    <section class="content-wrapper">
+        {% include 'shared/adminLTE/_breadcrumb.html.twig' with {'title':'Transfert vers sous-compte'} %}
+           <div class="content">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-4 col-lg-offset-3">
+                    <div data-url="{{ path('transaction_bpay_form_type') }}" id="panel-transaction-form">
+                        {{ form_start(formView,{'attr':{'id':'AccountToAccountTransferForm'}}) }}
+                        <div class="block">
+                            {{ form_row(formView._token) }}
+                        </div>
+                        <div id="transfer_vers_sous_compte_path" data-make="{{ path('transaction_make_sub_account_transfert') }}" data-check="{{ path('transaction_verify_user') }}"></div>
+                        <section class="panel steping step1 animate__animated animate__fadeIn" id="step1">
+                            <div class="card card-dark">
+                                <div class="card-header" style="position: relative;">
+                                <h4 class="panel-title" style="text-align: center;">{{ compte.loadServiceById(compte.getServiceId()) }}&nbsp;<span><i class="fa fa-arrow-right"></i></span>&nbsp;{{ compte.getServiceId() }}</h4>
+                                    <div class="card-tools" style="position: absolute;right: 5px;top: 5px;">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                            <a id="backAction"  style="cursor: pointer;" class="fas fa-1x fa-times"></a>
+                                        </button>
+                                    </div>                            </div>
+                            <div class="card-body">
+                                <div id="transfer-container">
+                                    <div class="form-group mb-sm  mt-sm" >
+                                        <label>Adresse Email du destinataire</label>
+                                        <div class="input-group input-group-icon" style="position: relative;width: 100%;">
+                                            {{ form_widget(formView.email)}}
+                                        </div>
+                                        <div class="user-find-msg" style="margin-top: 5px;"></div>
+                                    </div>
+                                    <div class="form-group mb-sm  mt-sm" >
+                                        <label>Montant à envoyer</label>
+                                        <div class="input-group input-group-icon" style="position: relative;width: 100%;">
+                                            {{ form_widget(formView.amount)}}
+                                        </div>
+                                    </div>
+                                    <div class="transfer-error">
+                                    </div>
+
+                                    {{ form_widget(formView.subAccountId)}}
+                                    <button id="transfer-souscompte-to-souscompte-btn-js" type="button"  style="
+  border: 0 !important;border-radius: 2px !important; color:white !important;"  class="btn btn-dark btn-block btn-lg mt-lg">
+                                        <span class="icon icon-lg"><i class="fa fa-send"></i></span> Envoyer
+                                    </button>
+                                </div>
+                            </div>
+                        </section>
+                        {{ form_end(formView,{render_rest:false}) }}
+                    </div>
+                    <div id="another-step-container"></div>
+                </div>
+            </div>
+        </div>
+      {#  {{ render(path('member_header')) }}
+        <div class="inner-wrapper">
+            {{ render(path('member_menu_left')) }}
+            <section role="main" class="content-body">
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Transfert vers sous compte'} %}
+                <div class="row">
+
+                </div>
+            </section>
+        </div>#}
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $('body').on('click','#backAction-transfert',function (){
+            $('#another-step-container').html('');
+            $('#panel-transaction-form').fadeIn();
+        })
+        $('body').on('click','#transfer-souscompte-to-souscompte-btn-js',function (){
+            event.preventDefault();
+            $('.form-error').removeClass('form-error-active');
+            if(!$('#AccountToAccountTransferForm').validate()){
+                $('.form-error').addClass('form-error-active');
+                return false;
+            }
+            let email = $('#transfert_vers_sous_compte_email').val();
+            let amount = $('#transfert_vers_sous_compte_amount').val();
+            let serviceId = $('#transfert_vers_sous_compte_subAccountId').val();
+            if(email.length <= 0 || amount.length <= 0){
+                $('.form-error').addClass('form-error-active');
+                return false;
+            }
+            makeTransferAccountToAccount(email,amount,serviceId);
+        });
+        function makeTransferAccountToAccount(email,amount,serviceId){
+            $('.transfer-error').text('').removeClass('alert-danger alert');
+            $.ajax({
+                url: $('#transfer_vers_sous_compte_path').attr('data-make'),
+                type: 'POST',
+                data: ({email: email, step: 1, amount : amount,serviceId:serviceId}),
+                dataType: "json",
+                success: function(data){
+                    console.log(data);
+                    let step = data.step;
+                    let status = data.status;
+                    switch (status){
+                        case 'SUCCESS':
+                            $('#another-step-container').html(data.widgetConfirm);
+                            $('#panel-transaction-form').fadeOut();
+                            console.log(data);
+                            break;
+                        case 'ERROR':
+                            $('.transfer-error').text(data.errorMessage).addClass('alert-danger alert');
+                            break;
+                        default:
+                            break;
+                    }
+                },
+                error:function (error){
+                    console.log(error)
+                }
+            });
+        }
+        $('body').on('click','#saccount-to-saccount-v2-transfer-confirm',function (){
+            event.preventDefault();
+            showLoading();
+            let email = $('#transfert_vers_sous_compte_email').val();
+            let amount = $('#transfert_vers_sous_compte_amount').val();
+            let serviceId = $('#transfert_vers_sous_compte_subAccountId').val();
+            let code = $('#codeConfirmation').val();
+            $.ajax({
+                url: $('#transfer_vers_sous_compte_path').attr('data-make'),
+                type: 'POST',
+                data: ({email: email, step: 2, amount : amount,serviceId:serviceId,code:code}),
+                dataType: "json",
+                success: function(data){
+                    switch (data.status) {
+                        case 'SUCCESS':
+                            $('#another-step-container').html(data.widgetSuccess);
+                            setTimeout(function(){
+                                window.location.href = data.redirectUrl;
+                            },5000)
+                            break;
+                        default:
+                            $('.transfer-error-confirm').text(data.errorMessage).addClass('alert-danger alert');
+                            closeLoading();
+                            break;
+                    }
+                },
+                error:function (error){
+                    console.log(error)
+                }
+            });
+        })
+        $('#transfert_vers_sous_compte_email').change(function (){
+            $.ajax({
+                url: $('#transfer_vers_sous_compte_path').attr('data-check'),
+                type: 'POST',
+                async: false, // Mode synchrone
+                data: ({value: $(this).val()}),
+                dataType: "json",
+                success: function(data){
+                    if(data.status == 'SUCCESS'){
+                        $('.user-find-msg').text(`${'Ah! ' + data.user.nom + ' ' +  data.user.prenoms}`).addClass('alert-success alert');
+                    }else{
+                        $('.user-find-msg').text(data.error).addClass('alert-danger alert');
+                    }
+                },
+                error:function (error){
+                    console.log(error)
+                }
+            });
+        });
+        function closeLoading(){
+            $('#process-control').html('');
+        }
+        function  showLoading(){
+            $('#process-control').html(`<div class="processing" style="  position: absolute;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    z-index: 999999999;
+    margin: 0 auto;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;">
+                <div class="lds-spinner" style="
+display: inline-block;
+position: relative;
+top:50%;
+left: 50%;
+transform: translate(-50%,-50%);
+width: 80px;
+height: 80px;
+">
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>`);
+        }
+    </script>
+{% endblock %}

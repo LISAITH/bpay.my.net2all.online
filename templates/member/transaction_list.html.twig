@@ -1,0 +1,178 @@
+{% extends 'layout.html.twig' %}
+
+{% block title %} Tableau de Bord {% endblock %}
+{% block sideBar %}
+    {{ render(path('member_menu_left')) }}
+{% endblock %}
+{% block body %}
+
+    <section class="content-wrapper">
+        {% include 'shared/adminLTE/_breadcrumb.html.twig' with {'title':'Mes transactions'} %}
+        <section class="content">
+            <br class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-12">
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type Transaction</th>
+                                <th>Montant</th>
+                                <th>Méthode de Paiement</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for transItem in transactionList %}
+                                <tr class="gradeX">
+                                    <td>{{ transItem.id }}</td>
+                                    <td>{{ transItem.transactionTypeName }}</td>
+                                    <td>
+                                        <div style="display: flex;flex-direction: row;justify-content: start;align-items: center;">
+                                            <div style="display: flex;flex-direction: row;align-items: center;">
+                                                <span style="color:black;font-weight: bold">{{ transItem.amountPayed|number_format(2, ',', ' ') ~ ' ' ~ transItem.currency }}</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div style="display: flex;flex-direction: row;align-items: center;">
+                                            <div style="width: 30px;height: 30px; border-radius: 10%;overflow: hidden">
+                                                <img  style="border-radius: 10px;width: 100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/' ~ transItem.providerImg) }}" alt="{{ transItem.providerImg }}">
+                                            </div>
+                                            <span>&ensp;{{ transItem.providerName }}</span>
+
+                                        </div>
+                                    </td>
+                                    <td class="center">{{ transItem.paymentDate|date('d-m-Y h:m:s') }}</td>
+                                    {% if transItem.status == 'SUCCESSFUL' %}
+                                        <td class="center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                            </svg>
+                                        </td>
+                                    {% elseif transItem.status == 'FAILED' %}
+                                        <td class="center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                            </svg>
+                                        </td>
+                                    {% elseif transItem.status == 'PENDING' %}
+                                        <td class="center">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="yellow" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+                                                <path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
+                                            </svg>
+                                        </td>
+                                    {% endif %}
+                                    <td><a href="{{ url('transaction', {'guid': transItem.guid}) }}"> <button class="btn btn-sm btn-success"><span><i class="fa fa-eye"></i></span></button></a>
+                                        <button class="btn btn-sm btn-primary"><span><i class="fa fa-file"></i></span></button></td>
+                                </tr>
+
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </section>
+  {#  <section class="body">
+
+        {{ render(path('member_header')) }}
+
+        <div class="inner-wrapper">
+
+            {{ render(path('member_menu_left')) }}
+
+            <section role="main" class="content-body">
+
+                {% include 'shared/_main_page_header.html.twig' with {pageTitle:'Mes transactions'} %}
+
+                <!-- main: body -->
+                <section class="panel">
+                    <header class="panel-heading">
+                        <h2 class="panel-title" style="color:black;font-weight: 500;">Liste des transactions</h2>
+                    </header>
+                    <div class="panel-body">
+                        <table class="table table-bordered table-striped mb-none" id="datatable-details">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type Transaction</th>
+                                <th>Montant</th>
+                                <th>Méthode de Paiement</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                {% for transItem in transactionList %}
+                                    <tr class="gradeX">
+                                        <td>{{ transItem.id }}</td>
+                                        <td>{{ transItem.transactionTypeName }}</td>
+                                        <td>
+                                            <div style="display: flex;flex-direction: row;justify-content: start;align-items: center;">
+                                                <div style="display: flex;flex-direction: row;align-items: center;">
+                                                    <a href="{{ path('member_dashboard') }}" data-toggle="dropdown">
+                                                        <figure class="profile-picture">
+                                                            <img width="30" height="30"  src="{{ asset('/assets/images/coin.png') }}" alt="Joseph Doe" class="img-circle" data-lock-picture="assets/images/!logged-user.jpg" />
+                                                        </figure>
+                                                    </a>
+                                                    <span style="color:black;font-weight: bold">{{ transItem.amountPayed ~ ' ' ~ transItem.currency }}</span>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                    <div style="display: flex;flex-direction: row;align-items: center;">
+                                            <div style="width: 30px;height: 30px; border-radius: 10%;overflow: hidden">
+                                                <img  style="border-radius: 10px;width: 100%;height: 100%;object-fit: cover;" src="{{ asset('/assets/images/' ~ transItem.providerImg) }}" alt="{{ transItem.providerImg }}">
+                                            </div>
+                                            <span>&ensp;{{ transItem.providerName }}</span>
+
+                    </div>
+                                        </td>
+                                        <td class="center">{{ transItem.paymentDate|date('d-m-Y h:m:s') }}</td>
+                                        {% if transItem.status == 'SUCCESSFUL' %}
+                                            <td class="center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="green" class="bi bi-check-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M10.97 4.97a.235.235 0 0 0-.02.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-1.071-1.05z"/>
+                                                </svg>
+                                            </td>
+                                        {% elseif transItem.status == 'FAILED' %}
+                                            <td class="center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="red" class="bi bi-x-circle" viewBox="0 0 16 16">
+                                                    <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+                                                    <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                                                </svg>
+                                            </td>
+                                        {% elseif transItem.status == 'PENDING' %}
+                                            <td class="center">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="yellow" class="bi bi-hourglass-split" viewBox="0 0 16 16">
+                                                    <path d="M2.5 15a.5.5 0 1 1 0-1h1v-1a4.5 4.5 0 0 1 2.557-4.06c.29-.139.443-.377.443-.59v-.7c0-.213-.154-.451-.443-.59A4.5 4.5 0 0 1 3.5 3V2h-1a.5.5 0 0 1 0-1h11a.5.5 0 0 1 0 1h-1v1a4.5 4.5 0 0 1-2.557 4.06c-.29.139-.443.377-.443.59v.7c0 .213.154.451.443.59A4.5 4.5 0 0 1 12.5 13v1h1a.5.5 0 0 1 0 1h-11zm2-13v1c0 .537.12 1.045.337 1.5h6.326c.216-.455.337-.963.337-1.5V2h-7zm3 6.35c0 .701-.478 1.236-1.011 1.492A3.5 3.5 0 0 0 4.5 13s.866-1.299 3-1.48V8.35zm1 0v3.17c2.134.181 3 1.48 3 1.48a3.5 3.5 0 0 0-1.989-3.158C8.978 9.586 8.5 9.052 8.5 8.351z"/>
+                                                </svg>
+                                            </td>
+                                        {% endif %}
+                                        <td><a href="{{ url('transaction', {'guid': transItem.guid}) }}"> <button class="btn btn-sm btn-success"><span><i class="fa fa-eye"></i></span></button></a>
+                                            <button class="btn btn-sm btn-primary"><span><i class="fa fa-file"></i></span></button></td>
+                                    </tr>
+
+
+                                {% endfor %}
+                            </tbody>
+                        </table>
+        </div>
+    </section>
+
+    <!-- end: body -->
+    </section>
+    </div>
+
+    </section>#}
+{% endblock %}

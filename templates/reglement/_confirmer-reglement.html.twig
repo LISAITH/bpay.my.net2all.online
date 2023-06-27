@@ -1,0 +1,45 @@
+<section class="panel" id="panel-transaction-form"  style="position: relative;">
+    <div id="process-control">
+    </div>
+    <header class="panel-heading" style="background-color: #f0f0f0;border-bottom: 0 !important;">
+        <div class="panel-actions">
+            <a id="backAction"  style="cursor: pointer;" class="fa fa-2x fa-arrow-circle-o-left"></a>
+        </div>
+        <h6 style="font-size: 16px;" class="panel-title">Confirmation Règlement </h6>
+    </header>
+    <div class="panel-body">
+        <div class="d-flex flex-col justify-content-content-center align-items-center">
+            <h4 class="text-center">Choisissez la méthode de règlement</h4>
+            <div  class="bpay-payment-item-list-container">
+                {% for item in paymentMethodList %}
+                    {% set isActive = (item.id is same as (defaultActive.id)) ? 'bpay-payment-item-active':'' %}
+                    <div data-provider-code="{{ item.providerCode }}" class="bpa-payment-item {{ isActive }}">
+                        <img
+                                class="rounded-full ring ring-white dark:ring-navy-700"
+                                src="{{ asset('/assets/images/' ~ item.brand) }}"
+                                alt="avatar"
+                        />
+                        </div>
+                {% endfor %}
+                <input type="hidden" value="{{ paymentMethodList[0].providerCode }}" data-url="{{ path('business_payment_item_form') }}" id="reglement_paymentMethodType">
+            </div>
+            <br/>
+            <div id="virement-container-js">
+            </div>
+            <div class="button-wrapper">
+            <button id="paymentBtnButtonBpay" type="submit"  style="
+          border-radius: 0 !important;color:white !important;display: none;"  class="mb-xs mt-xs mr-xs btn btn-dark">
+                <span class="icon icon-lg"><i class="fa fa-money"></i></span> Payer {{ reglement.montant ~ ' ' ~ reglement.currency}} </span>
+            </button>      </div>
+            <div class="transfer-error-confirm"></div>
+        </br>
+    </div>
+</section>
+
+{% block javascripts %}
+    <script type="text/javascript">
+        $(document).ready(function (){
+            reloadPaymentForm();
+        });
+    </script>
+{% endblock %}
