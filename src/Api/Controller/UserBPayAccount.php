@@ -4,6 +4,7 @@ namespace App\Api\Controller;
 
 use App\Controller\BaseController;
 use App\Entity\CompteBPay;
+use App\Repository\CompteBPayRepository;
 use App\Service\APIService\ApiUser;
 use App\Service\BusinessService;
 use App\Service\SecurityService;
@@ -19,20 +20,35 @@ class UserBPayAccount extends BaseController
     private $securityService;
     private $apiAuth;
     private $entityManager;
+    private CompteBPayRepository $compteBPayRepository;
 
-    public function __construct(BusinessService $businessService, ApiUser $apiUser, SecurityService $securityService, EntityManagerInterface $entityManager)
+    public function __construct(CompteBPayRepository $compteBPayRepository, BusinessService $businessService, ApiUser $apiUser, SecurityService $securityService, EntityManagerInterface $entityManager)
     {
         $this->businessService = $businessService;
         $this->securityService = $securityService;
         $this->apiAuth = $apiUser;
         $this->entityManager = $entityManager;
+        $this->compteBPayRepository = $compteBPayRepository;
     }
 
-    #[Route('/compte/user/{user_id}', name: 'compte', methods: ['GET'])]
-    public function getCompte(int $user_id): JsonResponse
+    #[Route('/one/compte/bpay/{user_id}/{type_id}', name: 'get_one_compte_bpay', methods: ['GET'])]
+    public function getOneCompteBpay(int $user_id, int $type_id): JsonResponse
     {
-        // Utilisez $user_id pour récupérer le compte B-PAY de l'utilisateur spécifié
-        // ...
+        if ($type_id === 1) {
+            $compte = $this->compteBPayRepository->findOneBy(["particulier_id" => $user_id]);
+        } elseif ($type_id === 2) {
+            $compte = $this->compteBPayRepository->findOneBy(["distributeur_id" => $user_id]);
+        } elseif ($type_id === 3) {            
+            $compte = $this->compteBPayRepository->findOneBy(["partenaire_id" => $user_id]);
+        } elseif ($type_id === 4) {
+            // Pas encore de solution
+        } elseif ($type_id === 5) {
+            $compte = $this->compteBPayRepository->findOneBy(["pointVente_id" => $user_id]);
+        } elseif ($type_id === 6) {
+            $compte = $this->compteBPayRepository->findOneBy(["entreprise_id" => $user_id]);
+        }
+
+        return $this->json($compte);
     }
 
     #[Route('/api/create/compte/Bpay/user', name: 'create_compte_bpay', methods: ['POST'])]
@@ -49,6 +65,7 @@ class UserBPayAccount extends BaseController
         // 4 - Administrateur
         // 5 - Point de vente fixe et mobile
         // 6 - Entreprise
+        // 7 - Plateforme
 
         $accountNumber = $this->getRandomText(10);
         $compteBPay = new CompteBPay();
@@ -56,17 +73,19 @@ class UserBPayAccount extends BaseController
         $compteBPay->setSolde(0);
 
         if ($type_id === 1) {
-            $compteBPay->setParticulierId($user_id);
+            $ecash->setParticulierId($user_id);
         } elseif ($type_id === 2) {
-            $compteBPay->setDistributeurId($user_id);
+            $ecash->setDistributeurId($user_id);
         } elseif ($type_id === 3) {
-            $compteBPay->setPartenaireId($user_id);
+            $ecash->setPartenaireId($user_id);
         } elseif ($type_id === 4) {
             // Pas encore de solution
         } elseif ($type_id === 5) {
-            $compteBPay->setPointVenteId($user_id);
+            $ecash->setPointVenteId($user_id);
         } elseif ($type_id === 6) {
-            $compteBPay->setEntrepriseId($user_id);
+            $ecash->setEntrepriseId($user_id);
+        } elseif ($type_id === 7) {
+            $ecash->setPlateformeId($user_id);
         }
 
         $this->entityManager->persist($compteBPay);

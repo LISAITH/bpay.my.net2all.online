@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\CompteBPay;
+use App\Repository\CompteBPayRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -12,18 +13,34 @@ class CompteBPayController extends AbstractController
 {
     
     private $entityManager;
+    private CompteBPayRepository $compteBPayRepository;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(CompteBPayRepository $compteBPayRepository, EntityManagerInterface $entityManager)
     {
         $this->entityManager = $entityManager;
+        $this->compteBPayRepository = $compteBPayRepository;
     }
 
-    #[Route('/compte/b/pay', name: 'app_compte_b_pay')]
-    public function index(): Response
+    #[Route('/get/one/compte/Bpay/{user_id}/{type_id}', name: 'app_get_one_compte_b_pay')]
+    public function getOneCompte(int $user_id, int $type_id)
     {
-        return $this->render('compte_b_pay/index.html.twig', [
-            'controller_name' => 'CompteBPayController',
-        ]);
+        if ($type_id === 1) {
+            $compte = $this->compteBPayRepository->findOneBy(["particulier_id" => $user_id]);
+        } elseif ($type_id === 2) {
+            $compte = $this->compteBPayRepository->findOneBy(["distributeur_id" => $user_id]);
+        } elseif ($type_id === 3) {            
+            $compte = $this->compteBPayRepository->findOneBy(["partenaire_id" => $user_id]);
+        } elseif ($type_id === 4) {
+            // Pas encore de solution
+        } elseif ($type_id === 5) {
+            $compte = $this->compteBPayRepository->findOneBy(["pointVente_id" => $user_id]);
+        } elseif ($type_id === 6) {
+            $compte = $this->compteBPayRepository->findOneBy(["entreprise_id" => $user_id]);
+        } elseif ($type_id === 7) {
+            $compte = $this->compteBPayRepository->findOneBy(["plateforme_id" => $user_id]);
+        }
+
+        return $this->json($compte);
     }
 
     #[Route('/create/compte/Bpay/{user_id}/{type_id}', name: 'app_new_compte_b_pay')]
@@ -46,6 +63,8 @@ class CompteBPayController extends AbstractController
             $ecash->setPointVenteId($user_id);
         } elseif ($type_id === 6) {
             $ecash->setEntrepriseId($user_id);
+        } elseif ($type_id === 7) {
+            $ecash->setPlateformeId($user_id);
         }
 
         $this->entityManager->persist($ecash);

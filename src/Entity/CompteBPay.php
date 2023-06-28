@@ -17,20 +17,28 @@ use Symfony\Component\Serializer\Annotation\Groups;
  */
 #[ApiResource(
     collectionOperations: [
-        'get' => [
+        'getOneCompteBpay' => [
             'method' => 'GET',
-            'path' => '/compte/user/{user_id}',
+            'path' => '/one/compte/bpay/{user_id}/{type_id}',
             'controller' => UserBPayAccount::class,
             'read' => false,
             'paginationEnabled' => false,
             'filters' => [],
             'normalizationContext' => ['groups' => ['read:collection']],
             'openapi_context' => [
-                'summary' => 'Récupère le compte B-PAY d\'un utilisateur',
-                'description' => 'Récupère le compte B-PAY d\'un utilisateur',
+                'summary' => 'Récupère le compte B-PAY d\'un utilisateur selon son type',
+                'description' => 'Récupère le compte B-PAY d\'un utilisateur selon son type',
                 'parameters' => [
                     [
                         'name' => 'user_id',
+                        'in' => 'path',
+                        'required' => true,
+                        'schema' => [
+                            'type' => 'integer',
+                        ],
+                    ],
+                    [
+                        'name' => 'type_id',
                         'in' => 'path',
                         'required' => true,
                         'schema' => [
@@ -130,6 +138,12 @@ class CompteBPay
     #[Groups(['read:collection'])]
     private $pointVente_id;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    #[Groups(['read:collection'])]
+    private $plateforme_id;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -215,6 +229,18 @@ class CompteBPay
     public function setPointVenteId(?int $pointVente_id): self
     {
         $this->pointVente_id = $pointVente_id;
+
+        return $this;
+    }
+
+    public function getPlateformeId(): ?int
+    {
+        return $this->plateforme_id;
+    }
+
+    public function setPlateformeId(?int $plateforme_id): self
+    {
+        $this->plateforme_id = $plateforme_id;
 
         return $this;
     }
