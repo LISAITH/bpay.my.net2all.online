@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Service\APIService\ApiUser;
-use App\Service\SecurityService;
+use App\Services\APIService\ApiUser;
+use App\Services\SecurityService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;

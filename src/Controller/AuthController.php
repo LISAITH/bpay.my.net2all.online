@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
+
 class AuthController extends AbstractController
 {
     private $apiGetUser = 'users/';
@@ -14,10 +15,14 @@ class AuthController extends AbstractController
 
     public function check_authentificated(Request $request)
     {
-        // return $this->api_key;
         $session = $request->getSession();
         $info = ['status' => true];
-        if (!$session->get('currentuser')) {$info = ['status' => false, 'url' => 'https://my.net2all.online'];}
+        if (!$session->get('currentuser')) {
+            $url = $_ENV['myNet2AllLink'];
+            $info = ['status' => false, 'url' => $url];
+        }
+        
+        // if (!$session->get('currentuser')) {$info = ['status' => false, 'url' => 'https://my.net2all.online'];}
 
         return $info;
     }

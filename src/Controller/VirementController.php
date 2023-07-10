@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Form\VirementType;
-use App\Service\APIService\ApiUser;
-use App\Service\SecurityService;
+use App\Services\APIService\ApiUser;
+use App\Services\SecurityService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

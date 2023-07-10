@@ -4,9 +4,9 @@ namespace App\Api\Controller;
 
 use App\Controller\BaseController;
 use App\Entity\PaiementCarte;
-use App\Service\BPayConfigService;
-use App\Service\CommonService;
-use App\Service\SecurityService;
+use App\Services\BPayConfigService;
+use App\Services\CommonService;
+use App\Services\SecurityService;
 use App\Utils\constants;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

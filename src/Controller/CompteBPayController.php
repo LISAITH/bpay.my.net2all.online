@@ -21,6 +21,28 @@ class CompteBPayController extends AbstractController
         $this->compteBPayRepository = $compteBPayRepository;
     }
 
+    #[Route('/get/all/compte/Bpay/{user_id}/{type_id}', name: 'app_get_all_compte_b_pay')]
+    public function getAllCompte(int $user_id, int $type_id)
+    {
+        if ($type_id === 1) {
+            $compte = $this->compteBPayRepository->findBy(["particulier_id" => $user_id]);
+        } elseif ($type_id === 2) {
+            $compte = $this->compteBPayRepository->findBy(["distributeur_id" => $user_id]);
+        } elseif ($type_id === 3) {            
+            $compte = $this->compteBPayRepository->findBy(["partenaire_id" => $user_id]);
+        } elseif ($type_id === 4) {
+            // Pas encore de solution
+        } elseif ($type_id === 5) {
+            $compte = $this->compteBPayRepository->findBy(["pointVente_id" => $user_id]);
+        } elseif ($type_id === 6) {
+            $compte = $this->compteBPayRepository->findBy(["entreprise_id" => $user_id]);
+        } elseif ($type_id === 7) {
+            $compte = $this->compteBPayRepository->findBy(["plateforme_id" => $user_id]);
+        }
+
+        return $this->json($compte);
+    }
+
     #[Route('/get/one/compte/Bpay/{user_id}/{type_id}', name: 'app_get_one_compte_b_pay')]
     public function getOneCompte(int $user_id, int $type_id)
     {

@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Entity\UserAuth;
 use App\Form\SecretAuthType;
-use App\Service\APIService\ApiService;
-use App\Service\APIService\ApiUser;
-use App\Service\SecurityService;
+use App\Services\APIService\ApiService;
+use App\Services\APIService\ApiUser;
+use App\Services\SecurityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

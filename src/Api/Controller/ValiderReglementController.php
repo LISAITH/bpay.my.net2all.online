@@ -4,11 +4,11 @@ namespace App\Api\Controller;
 
 use App\Controller\BaseController;
 use App\Entity\ReglementBPayLink;
-use App\Service\APIService\ApiUser;
-use App\Service\BPayConfigService;
-use App\Service\BusinessService;
-use App\Service\CommonService;
-use App\Service\SecurityService;
+use App\Services\APIService\ApiUser;
+use App\Services\BPayConfigService;
+use App\Services\BusinessService;
+use App\Services\CommonService;
+use App\Services\SecurityService;
 use App\Utils\constants;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

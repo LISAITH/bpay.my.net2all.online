@@ -4,10 +4,10 @@ namespace App\Api\Controller;
 
 use App\Controller\BaseController;
 use App\Entity\SousCompte;
-use App\Service\APIService\ApiService;
-use App\Service\APIService\ApiUser;
-use App\Service\BusinessService;
-use App\Service\SecurityService;
+use App\Services\APIService\ApiService;
+use App\Services\APIService\ApiUser;
+use App\Services\BusinessService;
+use App\Services\SecurityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

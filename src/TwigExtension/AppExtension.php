@@ -2,7 +2,7 @@
 
 namespace App\TwigExtension;
 
-use App\Service\APIService\ApiService;
+use App\Services\APIService\ApiService;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 

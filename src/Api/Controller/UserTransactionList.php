@@ -2,14 +2,14 @@
 
 namespace App\Api\Controller;
 
-use App\Service\APIService\ApiUser;
-use App\Service\BusinessService;
+use App\Services\APIService\ApiUser;
+use App\Services\BusinessService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use App\Controller\BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use App\Service\SecurityService;
+use App\Services\SecurityService;
 
 class UserTransactionList extends BaseController
 {

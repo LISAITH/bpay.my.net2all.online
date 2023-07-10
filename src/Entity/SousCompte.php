@@ -6,7 +6,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 use App\Api\Controller\GetUserSubAccountByService;
 use App\Api\Controller\UserSubAccountController;
 use App\Repository\SousCompteRepository;
-use App\Service\APIService\ApiService;
+use App\Services\APIService\ApiService;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 

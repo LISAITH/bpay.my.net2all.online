@@ -4,8 +4,8 @@ namespace App\Api\Controller;
 
 use App\Controller\BaseController;
 use App\Entity\BPayMomoTransaction;
-use App\Service\BusinessService;
-use App\Service\SecurityService;
+use App\Services\BusinessService;
+use App\Services\SecurityService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

@@ -3,9 +3,9 @@
 namespace App\Api\Controller;
 
 use App\Controller\BaseController;
-use App\Service\APIService\ApiUser;
-use App\Service\BusinessService;
-use App\Service\SecurityService;
+use App\Services\APIService\ApiUser;
+use App\Services\BusinessService;
+use App\Services\SecurityService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

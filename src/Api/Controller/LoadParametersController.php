@@ -3,7 +3,7 @@
 namespace App\Api\Controller;
 
 use App\Entity\Parametres;
-use App\Service\BPayConfigService;
+use App\Services\BPayConfigService;
 use App\Controller\BaseController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
