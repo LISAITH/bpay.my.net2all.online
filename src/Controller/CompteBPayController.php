@@ -32,7 +32,7 @@ class CompteBPayController extends AbstractController
         } elseif ($type_id === 3) {            
             $compte = $this->compteBPayRepository->findOneBy(["partenaire_id" => $user_id]);
         } elseif ($type_id === 4) {
-            // Pas encore de solution
+            $compte = null;
         } elseif ($type_id === 5) {
             $compte = $this->compteBPayRepository->findOneBy(["pointVente_id" => $user_id]);
         } elseif ($type_id === 6) {
