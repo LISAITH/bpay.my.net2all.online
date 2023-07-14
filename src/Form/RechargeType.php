@@ -10,29 +10,29 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class RechargeType extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
-    {
-        $builder->add('montant', NumberType::class, [
-            'required' => true,
-            'html5' => true,
-            'attr' => ['placeholder' => 'Montant à recharger', 'class' => 'form-control '],
-            'label' => 'Montant à recharger', ]);
+    // public function buildForm(FormBuilderInterface $builder, array $options)
+    // {
+    //     $builder->add('montant', NumberType::class, [
+    //         'required' => true,
+    //         'html5' => true,
+    //         'attr' => ['placeholder' => 'Montant à recharger', 'class' => 'form-control '],
+    //         'label' => 'Montant à recharger', ]);
 
-        $builder->add('paymentMethodType', HiddenType::class, [
-            'required' => true,
-            'data' => $options['paymentMethodType'],
-        ]);
-        $builder->add('transactionRef', HiddenType::class, [
-            'required' => true,
-            'data' => $options['transactionRef'],
-        ]);
-    }
+    //         $builder->add('paymentMethodType', HiddenType::class, [
+    //         'required' => true,
+    //         'data' => $options['paymentMethodType'],
+    //     ]);
+    //     $builder->add('transactionRef', HiddenType::class, [
+    //         'required' => true,
+    //         'data' => $options['transactionRef'],
+    //     ]);
+    // }
 
-    public function configureOptions(OptionsResolver $resolver)
-    {
-        $resolver->setDefaults([
-            'paymentMethodType' => null,
-            'transactionRef' => null,
-        ]);
-    }
+    // public function configureOptions(OptionsResolver $resolver)
+    // {
+    //     $resolver->setDefaults([
+    //         'paymentMethodType' => null,
+    //         'transactionRef' => null,
+    //     ]);
+    // }
 }
