@@ -5,23 +5,26 @@ namespace App\Services\APIService;
 use App\Entity\Service;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Services\AppServices;
 
 class ApiService
 {
     private $httpClient;
     private $parameterBag;
+    private AppServices $appServices;
 
-    public function __construct(HttpClientInterface $httpClient, ParameterBagInterface $parameterBag)
+    public function __construct(AppServices $appServices,HttpClientInterface $httpClient, ParameterBagInterface $parameterBag)
     {
         $this->httpClient = $httpClient;
         $this->parameterBag = $parameterBag;
+        $this->appServices = $appServices;
     }
 
     public function getServiceById(int $serviceId): ?Service
     {
         $newService = null;
         try {
-            $baseUri = $this->parameterBag->get('API_URL').'/services/'.$serviceId;
+            $baseUri = $this->appServices->getBpayServerAddress().'/services/'.$serviceId;
             $response = $this->httpClient->request('GET', $baseUri, [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -52,7 +55,7 @@ class ApiService
     public function getAllServices(): array
     {
         $servicesList = [];
-        $baseUri = $this->parameterBag->get('API_URL').'/services';
+        $baseUri = $this->appServices->getBpayServerAddress().'/services';
         $response = $this->httpClient->request('GET', $baseUri, [
             'headers' => [
                 'Content-Type' => 'application/json',

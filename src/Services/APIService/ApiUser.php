@@ -10,18 +10,21 @@ use App\Utils\constants;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Services\AppServices;
 
 class ApiUser
 {
     private $httpClient;
     private $parameterBag;
     private $entityManager;
+    private AppServices $appServices;
 
-    public function __construct(HttpClientInterface $httpClient, ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager)
+    public function __construct(AppServices $appServices,HttpClientInterface $httpClient, ParameterBagInterface $parameterBag, EntityManagerInterface $entityManager)
     {
         $this->httpClient = $httpClient;
         $this->entityManager = $entityManager;
         $this->parameterBag = $parameterBag;
+        $this->appServices = $appServices;
     }
 
     public function getUserByEmailAddress(string $emailAddress): ?User
@@ -84,7 +87,7 @@ class ApiUser
         $user = new User();
         try {
 
-            $baseUri = $this->parameterBag->get('API_URL').'/users/'.$user_id;
+            $baseUri = $this->appServices->getBpayServerAddress().'/users/'.$user_id;
 
             $response = $this->httpClient->request('GET', $baseUri, [
                 'headers' => [
@@ -180,7 +183,7 @@ class ApiUser
     {
         $entreprise = new Entreprises();
         try {
-            $baseUri = $this->parameterBag->get('API_URL').'/entreprises/'.$id;
+            $baseUri = $this->appServices->getBpayServerAddress().'/entreprises/'.$id;
             $response = $this->httpClient->request('GET', $baseUri, [
                 'headers' => [
                     'Content-Type' => 'application/json',
@@ -207,7 +210,7 @@ class ApiUser
     {
         $particulier = new Particuliers();
         try {
-            $baseUri = $this->parameterBag->get('API_URL').'/particuliers/'.$id;
+            $baseUri = $this->appServices->getBpayServerAddress().'/particuliers/'.$id;
             $response = $this->httpClient->request('GET', $baseUri, [
                 'headers' => [
                     'Content-Type' => 'application/json',

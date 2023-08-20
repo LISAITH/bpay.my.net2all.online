@@ -6,6 +6,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use App\Services\AppServices;
 
 class BaseController extends AuthController
 {
@@ -13,9 +14,15 @@ class BaseController extends AuthController
     private $cryption_key = 'GeeksforGeeks';
     private $options = 0;
     private $cryption_iv = '1234567891011121';
-    private $apiGetUser = 'users/';
-    private $oneApiService = 'api_services/one/';
-    private $apiGetEnseigne = 'enseignes/';
+    private $apiGetUser = '/api/users/';
+    private $oneApiService = '/api/api_services/one/';
+    private $apiGetEnseigne = '/api/enseignes/';
+    private AppServices $appServices;
+
+    public function __construct(AppServices $appServices)
+    {
+        $this->appServices = $appServices;
+    }
 
     /**
      * @Route("/welo", name="welo")
@@ -46,7 +53,7 @@ class BaseController extends AuthController
             $request,
             $client,
             'GET',
-            $this->getParameter('API_URL').'/'.$this->apiGetUser.$userid,
+            $this->appServices->getBpayServerAddress().$this->apiGetUser.$userid,
             [
                 'query' => [],
             ]
@@ -92,7 +99,7 @@ class BaseController extends AuthController
                 $request,
                 $client,
                 'GET',
-                $this->getParameter('API_URL').'/'.$this->oneApiService.$appid.'/1',
+                $this->appServices->getBpayServerAddress().$this->oneApiService.$appid.'/1',
                 [
                     'query' => [],
                 ]
@@ -112,7 +119,7 @@ class BaseController extends AuthController
                 $request,
                 $client,
                 'GET',
-                $this->getParameter('API_URL').'/'.$this->apiGetEnseigne.$appid,
+                $this->appServices->getBpayServerAddress().$this->apiGetEnseigne.$appid,
                 [
                     'query' => [],
                 ]

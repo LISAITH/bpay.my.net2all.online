@@ -5,20 +5,27 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use App\Services\AppServices;
 
 
 class AuthController extends AbstractController
 {
-    private $apiGetUser = 'users/';
+    private $apiGetUser = '/api/users/';
     private $oneApiService = 'api_services/one/';
-    private $apiGetEnseigne = 'enseignes/';
+    private $apiGetEnseigne = '/api/enseignes/';
+    private AppServices $appServices;
+
+    public function __construct(AppServices $appServices)
+    {
+        $this->appServices = $appServices;
+    }
 
     public function check_authentificated(Request $request)
     {
         $session = $request->getSession();
         $info = ['status' => true];
         if (!$session->get('currentuser')) {
-            $url = $_ENV['myNet2AllLink'];
+            $url = $this->appServices->getMyServerAddress();
             $info = ['status' => false, 'url' => $url];
         }
         
@@ -90,7 +97,7 @@ class AuthController extends AbstractController
             $request,
             $client,
             'GET',
-            $this->getParameter('API_URL').'/'.$this->apiGetUser.$userid,
+            $this->appServices->getBpayServerAddress().$this->apiGetUser.$userid,
             [
                 'query' => [],
             ]
@@ -140,7 +147,7 @@ class AuthController extends AbstractController
                 $request,
                 $client,
                 'GET',
-                $this->getParameter('API_URL').'/'.$this->oneApiService.$appid.'/1',
+                $this->appServices->getBpayServerAddress().$this->oneApiService.$appid.'/1',
                 [
                     'query' => [],
                 ]
@@ -162,7 +169,7 @@ class AuthController extends AbstractController
                 $request,
                 $client,
                 'GET',
-                $this->getParameter('API_URL').'/'.$this->apiGetEnseigne.$appid,
+                $this->appServices->getBpayServerAddress().$this->apiGetEnseigne.$appid,
                 [
                     'query' => [],
                 ]

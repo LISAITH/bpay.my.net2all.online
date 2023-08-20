@@ -15,4 +15,10 @@ class AppServices
         $buninesServerAddress = $_ENV['businessLink'];
         return $buninesServerAddress;
     }
+
+    public function getMyServerAddress()
+    {
+        $myServerAddress = $_ENV['myNet2AllLink'];
+        return $myServerAddress;
+    }
 }
