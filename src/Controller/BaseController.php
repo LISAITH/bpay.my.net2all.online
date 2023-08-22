@@ -53,7 +53,7 @@ class BaseController extends AuthController
             $request,
             $client,
             'GET',
-            $this->appServices->getBpayServerAddress().$this->apiGetUser.$userid,
+            $this->$_ENV['businessLink'].$this->apiGetUser.$userid,
             [
                 'query' => [],
             ]
@@ -99,7 +99,7 @@ class BaseController extends AuthController
                 $request,
                 $client,
                 'GET',
-                $this->appServices->getBpayServerAddress().$this->oneApiService.$appid.'/1',
+                $this->$_ENV['businessLink'].$this->oneApiService.$appid.'/1',
                 [
                     'query' => [],
                 ]
@@ -119,7 +119,7 @@ class BaseController extends AuthController
                 $request,
                 $client,
                 'GET',
-                $this->appServices->getBpayServerAddress().$this->apiGetEnseigne.$appid,
+                $this->$_ENV['businessLink'].$this->apiGetEnseigne.$appid,
                 [
                     'query' => [],
                 ]
